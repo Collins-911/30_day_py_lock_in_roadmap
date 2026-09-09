@@ -1,0 +1,4 @@
+Name: Collins 
+Course: Computer Science 
+Day: 6
+Learning Python every day.
