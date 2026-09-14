@@ -36,7 +36,7 @@ def add_student(students):
         try:
             age = int(input('Enter age: ').strip())
         except ValueError:
-            print(f'Age - {age}, must be a number!')
+            print(f'Age must be a number!')
             continue
         if age <= 0:
             print(f'Age - {age}, must be positive!')
@@ -48,13 +48,15 @@ def add_student(students):
         try:
             level = int(input('Enter level: ').strip())
         except ValueError:
-            print(f'Level - {level}, must be a number!')
+            print('Level must be a number!')
+            continue
+
         if level not  in [100,200,300,400,500,600]:
             print(f'Invalid level - {level}')
             continue
-
         break
 
+    # Score
     while True:
         try:
             score = int(input('Enter score: ').strip())
@@ -109,9 +111,65 @@ def view_student(students):
  for name, details in students.items():
      print(f'Name - {name}, Age - {details["age"]}, Level - {details["level"]}, Score - {details["score"]}')
 
+def update_student(students):
+    student_name = input('Enter student name: ').title()
+    if student_name in students:
+        option = input('1 - Age\n2 - Level\n3 - Score\n4 - Cancel\nChoose: ')
+
+        # Age
+        if option == '1':
+            while True:
+                try:
+                    new_age = int(input('Enter new age: ').strip())
+                except ValueError:
+                    print('Age must be a number!')
+                    continue
+                if new_age <= 0:
+                    print(f'Age - {new_age} must be positive')
+                    continue
+                students[student_name]['age'] = new_age
+                save_students(students)
+                print('Student age has been updated successfully!')
+                break
+        # Level
+        elif option == '2':
+            while True:
+                try:
+                    new_level = int(input('Enter new level: ').strip())
+                except ValueError:
+                    print('Level must be a number!')
+                    continue
+                if new_level not in [100,200,300,400,500,600]:
+                    print(f'Level - {new_level}, is invalid!')
+                    continue
+                students[student_name]['level'] = new_level
+                save_students(students)
+                print('Student level has been updated successfully!')
+                break
+        # Score
+        elif option == '3':
+            while True:
+                try:
+                    new_score = int(input('Enter new score: ').strip())
+                except ValueError:
+                    print('Score must be a number!')
+                    continue
+
+                if new_score < 0 or new_score > 100:
+                    print(f'Score - {new_score}, must be between 0 and 100!')
+                    continue
+                students[student_name]['score'] = new_score
+                save_students(students)
+                print('Student score has been updated successfully!')
+                break
+        elif option == '4':
+                print('Update cancelled!')
+    else:
+        print(f'Name - {student_name}, is not in data base')
+
 def handle_choice(students):
     while True:
-        choice = input('1 - Add student\n2 - Search student\n3 - Delete student\n4 - View all students\n5 - Exit\nChoose an option: ')
+        choice = input('1 - Add student\n2 - Search student\n3 - Delete student\n4 - View all students\n5 - Update student\n6 - Exit\nChoose an option: ')
         if choice == '1':
             add_student(students)
         elif choice == '2':
@@ -131,6 +189,8 @@ def handle_choice(students):
         elif choice == '4':
             view_student(students)
         elif choice == '5':
+            update_student(students)
+        elif choice == '6':
             print('Goodbye!')
             break
         else:
