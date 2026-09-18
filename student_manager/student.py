@@ -1,20 +1,7 @@
-import json
-
-def load_students():
-    try:
-        with open('students.json', 'r') as file:
-            students = json.load(file)
-            return students
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
-
-def save_students(students):
-    with open('students.json', 'w') as file:
-        json.dump(students,file,indent=4)
-
+from database import save_students
 def add_student(students):
 
-    #Name
+    # Name
     while True:
         name = input('Enter name: ').title().strip()
         if not name:
@@ -51,7 +38,7 @@ def add_student(students):
             print('Level must be a number!')
             continue
 
-        if level not  in [100,200,300,400,500,600]:
+        if level not in [100, 200, 300, 400, 500, 600]:
             print(f'Invalid level - {level}')
             continue
         break
@@ -61,18 +48,18 @@ def add_student(students):
         try:
             score = int(input('Enter score: ').strip())
         except ValueError:
-            print(f'Score - {score}, must be a number!')
+            print(f'Score must be a number!')
             continue
         if score < 0 or score > 100:
             print(f'Score - {score}, must be between 0 and 100!')
             continue
         break
 
-    #Add student
+    # Add student
     students[name] = {
-        "age" : age,
-        "level" : level,
-        "score" : score
+        "age": age,
+        "level": level,
+        "score": score
     }
     save_students(students)
     print(f'Student - {name}, added successfully!')
@@ -90,6 +77,7 @@ def search_student(students):
     else:
         return search, None
 
+
 def delete_student(students):
     if not students:
         print('No students to delete!')
@@ -101,15 +89,17 @@ def delete_student(students):
         save_students(students)
         print(f'Deleted name - {student_name}')
     else:
-        print(f'Deleted name - {student_name}')
-        
-def view_student(students):
- if not students:
-     print('No students found!')
-     return 
- 
- for name, details in students.items():
-     print(f'Name - {name}, Age - {details["age"]}, Level - {details["level"]}, Score - {details["score"]}')
+        print(f'Student - {student_name}, not found!')
+
+
+def view_students(students):
+    if not students:
+        print('No students found!')
+        return
+
+    for name, details in students.items():
+        print(f'Name - {name}\nAge - {details["age"]}\nLevel - {details["level"]}\nScore - {details["score"]}\n----------')
+
 
 def update_student(students):
     student_name = input('Enter student name: ').title()
@@ -139,7 +129,7 @@ def update_student(students):
                 except ValueError:
                     print('Level must be a number!')
                     continue
-                if new_level not in [100,200,300,400,500,600]:
+                if new_level not in [100, 200, 300, 400, 500, 600]:
                     print(f'Level - {new_level}, is invalid!')
                     continue
                 students[student_name]['level'] = new_level
@@ -163,44 +153,6 @@ def update_student(students):
                 print('Student score has been updated successfully!')
                 break
         elif option == '4':
-                print('Update cancelled!')
+            print('Update cancelled!')
     else:
         print(f'Name - {student_name}, is not in data base')
-
-def handle_choice(students):
-    while True:
-        choice = input('1 - Add student\n2 - Search student\n3 - Delete student\n4 - View all students\n5 - Update student\n6 - Exit\nChoose an option: ')
-        if choice == '1':
-            add_student(students)
-        elif choice == '2':
-            result = search_student(students)
-
-            if result:
-                search, student = result
-
-                if student:
-                    print(f"Age: {student['age']}")
-                    print(f"Level: {student['level']}")
-                    print(f"Score: {student['score']}")
-                else:
-                    print(f"Student - {search}, not found!")
-        elif choice == '3':
-            delete_student(students)
-        elif choice == '4':
-            view_student(students)
-        elif choice == '5':
-            update_student(students)
-        elif choice == '6':
-            print('Goodbye!')
-            break
-        else:
-            print(f'Invalid option - {choice}')
-
-students = load_students()
-handle_choice(students)
-
-
-
-
-
-
